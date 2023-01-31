@@ -67,8 +67,8 @@ const CommentDashboard = () => {
 
 export default airplane.view(
   {
-    slug: "customer_assignment_dashboard",
-    name: "Customer Assignment Dashboard",
+    slug: "comment_assignment_dashboard",
+    name: "Comment Assignment Dashboard",
   },
   CommentDashboard
 );
