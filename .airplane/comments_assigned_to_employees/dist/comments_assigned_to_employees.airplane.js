@@ -6742,7 +6742,7 @@ var require_table = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.filterRowsByColumns = exports.columnsFromRows = exports.table = void 0;
     var runtime_1 = require_runtime();
-    var table2 = async (rows, opts = {}) => {
+    var table = async (rows, opts = {}) => {
       let cfg;
       if (opts.columns) {
         const columns = opts.columns.length > 0 && typeof opts.columns[0] === "string" ? opts.columns.map((c) => ({ slug: c })) : opts.columns;
@@ -6760,7 +6760,7 @@ var require_table = __commonJS({
       }
       await (0, runtime_1.getRuntime)().display(cfg);
     };
-    exports.table = table2;
+    exports.table = table;
     var columnsFromRows = (rows) => {
       const columns = [];
       const knownColumns = new Set();
@@ -7711,7 +7711,6 @@ __export(exports, {
 var import_airplane = __toModule(require_airplane());
 var Airtable = require("airtable");
 var base = new Airtable({ apiKey: "keyj1WtHcX2Q7mgS3" }).base("appQrGAqzzRPKTJkq");
-var table = base("comments_assigned_to_employees");
 var comments_assigned_to_employees_airplane_default = import_airplane.default.task({
   slug: "comments_assigned_to_employees",
   name: "Comments assigned to employees",

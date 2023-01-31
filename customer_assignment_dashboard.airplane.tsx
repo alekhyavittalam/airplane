@@ -10,7 +10,7 @@ const CommentDashboard = () => {
 
   return (
     <Stack>
-      <Title> Comments Assignment</Title> //building a table for the view
+      <Title> Comments Assignment</Title> 
     <Stack>
       <Table
         id="employees"
@@ -18,7 +18,6 @@ const CommentDashboard = () => {
         task="list_of_employees"
         rowSelection = "single"
       />
-      //producing another table with comments assigned to just the selected employees
       {selectedEmployee && (
         <Table
         id="comments"
@@ -30,23 +29,22 @@ const CommentDashboard = () => {
         }}
         rowActions={[ //creating buttons to click in order to approve or flag comments
           {
-            slug: "flagged_comments",
-            label: 'Flag',
-          },
-          {
             slug: "approved_comments",
             label: 'Approve',
+          },
+          {
+            slug: "flagged_comments",
+            label: 'Flag',
           }
         ]}
        
         />
       )}
-      //Displaying comment status based on button clicked
        {selectedComment && (
           <Table
           id="comments"
           task={{
-            slug:"flagged_comments",  //calling flagged comments task
+            slug:"approved_comments",  //calling flagged comments task
             params:{record_id: selectedComment.record_id} //passing record id as param to identify which record to update
           }}
           />
@@ -55,7 +53,7 @@ const CommentDashboard = () => {
           <Table
           id="comments"
           task={{
-            slug:"approved_comments", //calling approved comments task
+            slug:"flagged_comments", //calling approved comments task
             params:{record_id: selectedComment.record_id} //passing record id as param to identify which record to update
           }}
           />
@@ -65,5 +63,12 @@ const CommentDashboard = () => {
   );
 };
 
-export default CommentDashboard;  //exporting the view
+ //exporting the view
 
+export default airplane.view(
+  {
+    slug: "customer_assignment_dashboard",
+    name: "Customer Assignment Dashboard",
+  },
+  CommentDashboard
+);
