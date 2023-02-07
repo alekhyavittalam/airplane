@@ -88,7 +88,7 @@ export default airplane.task(
 
 	// This is your task's entrypoint. When your task is executed, this
 	// function will be called.
-	
+
 	/**
 	 * async takes integer as argument
 	 * It displays the comments assigned to the specific employee that is selected
@@ -111,7 +111,7 @@ export default airplane.task(
 		base('comments_assigned_to_employees').select({
 			view: 'Grid view',
 		
-		}).firstPage(function(err, records) {
+		}).all(function(err, records) {
 			if (err) { console.error(err); return; }
 			records.forEach(function(record) {	//looping through the records
 				if (record.get('employee_id') == params.employee_id){	//checking is selected employee id is the same as record's employee id
