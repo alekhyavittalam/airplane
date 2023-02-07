@@ -904,10 +904,10 @@ var require_url_state_machine = __commonJS({
     function isNormalizedWindowsDriveLetter(string) {
       return /^[A-Za-z]:$/.test(string);
     }
-    function URLStateMachine(input, base2, encodingOverride, url, stateOverride) {
+    function URLStateMachine(input, base3, encodingOverride, url, stateOverride) {
       this.pointer = 0;
       this.input = input;
-      this.base = base2 || null;
+      this.base = base3 || null;
       this.encodingOverride = encodingOverride || "utf-8";
       this.stateOverride = stateOverride;
       this.url = url;
@@ -1574,10 +1574,10 @@ var require_URL_impl = __commonJS({
     exports.implementation = class URLImpl {
       constructor(constructorArgs) {
         const url = constructorArgs[0];
-        const base2 = constructorArgs[1];
+        const base3 = constructorArgs[1];
         let parsedBase = null;
-        if (base2 !== void 0) {
-          parsedBase = usm.basicURLParse(base2);
+        if (base3 !== void 0) {
+          parsedBase = usm.basicURLParse(base3);
           if (parsedBase === "failure") {
             throw new TypeError("Invalid base URL");
           }
@@ -5450,7 +5450,7 @@ var require_client = __commonJS({
     var lib_1 = require_lib3();
     var api_1 = __importDefault(require_src());
     var package_json_1 = __importDefault(require_package());
-    var Client = class {
+    var Client2 = class {
       constructor(opts = {}) {
         var _a;
         const env = (_a = globalThis.process) === null || _a === void 0 ? void 0 : _a.env;
@@ -5579,7 +5579,7 @@ var require_client = __commonJS({
         });
       }
     };
-    exports.Client = Client;
+    exports.Client = Client2;
   }
 });
 
@@ -7711,11 +7711,70 @@ __export(exports, {
 var import_airplane = __toModule(require_airplane());
 var Airtable = require("airtable");
 var base = new Airtable({ apiKey: "keyj1WtHcX2Q7mgS3" }).base("appQrGAqzzRPKTJkq");
+var table_comments_assigned = base("comments_assigned_to_employees");
+var base2 = new Airtable({ apiKey: "keyj1WtHcX2Q7mgS3" }).base("appm3YlMBVpZR4puP");
+var table_employees = base2("list_of_employees");
+function assignComments(comments_supabase, comments_airtable, employees) {
+  table_comments_assigned.select({
+    view: "Grid View"
+  }).all(function(error, records) {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    const commentsArray = records.map((record) => ({
+      comment_id: record.get("comment_id"),
+      comment: record.get("comment")
+    }));
+    console.log(commentsArray);
+    const airtableCommentIds = new Set(commentsArray.map((c) => c.comment_id));
+    const uniqueComments = comments_supabase.filter((c) => !airtableCommentIds.has(c.comments_id));
+    console.log("identification of unique comments passed");
+    uniqueComments.forEach((comment) => {
+      const randomEmployeeIndex = Math.floor(Math.random() * employees.length);
+      const randomEmployee = employees[randomEmployeeIndex];
+      comments_airtable.push({
+        employee_id: randomEmployee.employee_id,
+        emp_first_name: randomEmployee.emp_first_name,
+        emp_last_name: randomEmployee.emp_last_name,
+        comment_id: comment.comments_id,
+        comment: comment.comment,
+        comment_status: comment.comment_status
+      });
+    });
+    console.log("assign random emps passed");
+  });
+  return comments_airtable;
+}
+var { Client } = require("pg");
+var fs = require("fs");
+function convertData(commentsAirtable, employees) {
+  const client = new Client({
+    host: "db.nbeyjxksguhfcntoxrwa.supabase.co",
+    port: 5432,
+    user: "postgres",
+    password: "XaqxM6QFNJpMliRy",
+    database: "postgres"
+  });
+  client.connect();
+  const listOfCommentsQuery = fs.readFileSync("./list_of_comments.sql", "utf-8");
+  console.log(listOfCommentsQuery);
+  const result = client.query(listOfCommentsQuery);
+  const commentsSupabase = result.rows;
+  console.log("sql function success");
+  const assignedCommentstoEmployees = assignComments(commentsSupabase, table_comments_assigned, table_employees);
+  console.log("assignComments function success");
+  client.end();
+  return assignedCommentstoEmployees;
+}
 var comments_assigned_to_employees_airplane_default = import_airplane.default.task({
   slug: "comments_assigned_to_employees",
   name: "Comments assigned to employees",
   parameters: { employee_id: "integer" }
 }, async (params) => {
+  console.log("before calling function");
+  convertData(table_comments_assigned, table_employees);
+  console.log("print");
   base("comments_assigned_to_employees").select({
     view: "Grid view"
   }).firstPage(function(err, records) {
