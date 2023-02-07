@@ -13,6 +13,10 @@ export default airplane.task(
 	// This is your task's entrypoint. When your task is executed, this
 	// function to display the records will be called
 
+	/**
+	 * async function displays the list of employees
+	 */
+
 	async function getRecords(){
 		base('list_of_employees').select({
 		view: 'Grid view',

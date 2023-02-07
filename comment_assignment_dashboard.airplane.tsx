@@ -44,7 +44,7 @@ const CommentDashboard = () => {
           <Table
           id="comments"
           task={{
-            slug:"approved_comments",  //calling flagged comments task
+            slug:"approved_comments",  //calling approved comments task
             params:{record_id: selectedComment.record_id} //passing record id as param to identify which record to update
           }}
           />
@@ -53,7 +53,7 @@ const CommentDashboard = () => {
           <Table
           id="comments"
           task={{
-            slug:"flagged_comments", //calling approved comments task
+            slug:"flagged_comments", //calling flagged comments task
             params:{record_id: selectedComment.record_id} //passing record id as param to identify which record to update
           }}
           />

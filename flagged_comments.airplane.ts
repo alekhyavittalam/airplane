@@ -13,7 +13,11 @@ export default airplane.task(
 	},
 	// This is your task's entrypoint. When your task is executed, this
 	// function will be called.
-	//This function updates the comment status to flagged when the task is called
+	/**
+	 * async takes in string argument
+	 * It updates the comment_status to 'Flagged'
+	 * @param params 
+	 */
 
 	async (params) => {
 	base('comments_assigned_to_employees').update(params.record_id, {	//updates the particular record's comment status

@@ -12,7 +12,12 @@ export default airplane.task(
 		parameters: {record_id: "shorttext"}	//passing param record id to identify which record to update
 	},
 
-	//calling function
+	/**
+	 * async takes in string argument
+	 * It updates the comment_status to 'Approved'
+	 * @param params 
+	 */
+	
 	async (params) => {
 	base('comments_assigned_to_employees').update(params.record_id, {	//record id identifies which record to update
 		"comment_status": "Approved"	//comment status is updated to approved
@@ -22,6 +27,7 @@ export default airplane.task(
 		  return;
 		}
 	  })
-	}  
+	  
+	} 
 )
 
