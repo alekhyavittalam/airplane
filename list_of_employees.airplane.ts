@@ -22,7 +22,7 @@ export default airplane.task(
 		view: 'Grid view',
 		fields: ['employee_id', 'emp_first_name', 'emp_last_name']
 	
-	}).firstPage(function(err, records) {
+	}).all(function(err, records) {
 		if (err) { console.error(err); return; }
 
 		records.forEach(function(record) {	//looping through each record
